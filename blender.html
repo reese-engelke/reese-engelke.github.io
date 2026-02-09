@@ -1,16 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reese | Engineering & Personal Portfolio</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 900px; margin: auto; padding: 20px; background: #f4f4f4; }
+        header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 40px; }
+        .project-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        video, img { width: 100%; border-radius: 5px; }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        /* This targets any element (image or video) currently in fullscreen mode */
+        :fullscreen {
+            object-fit: contain !important;
+            background-color: black; /* Adds black bars to the sides of tall images */
+        }
+
+        /* Safari uses a different prefix, so we add this for compatibility */
+        :-webkit-full-screen {
+            object-fit: contain !important;
+            background-color: black;
+        }
+    </style>
+</head>
+
+
 <nav style="background: #333; padding: 1rem; text-align: center;">
     <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Home</a>
     <a href="fpga.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">FPGA Projects</a>
     <a href="blender.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Blender Art</a>
 </nav>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px;">
-    <div class="card">
-        <video autoplay loop muted width="100%"><source src="assets/render1.mp4"></video>
-        <h3>Project Name</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 40px; background: #eee;">
+
+    <div class="card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s;">
+        <img src="assets/noodleshop.png" alt="Noodle Shop Render" 
+             style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 5px solid #333; cursor: pointer;" onclick="openFullscreen(this)">
+        <div style="padding: 15px;">
+            <h3 style="margin: 0; font-family: sans-serif;">Noodle Shop</h3>
+            <p style="font-size: 0.9rem; color: #666;">Blender 4.0 - Eevee Render</p>
+        </div>
     </div>
-    <div class="card">
-        <video autoplay loop muted width="100%"><source src="assets/render2.mp4"></video>
-        <h3>Project Name</h3>
+
+    <div class="card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <video autoplay loop muted playsinline 
+               style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 5px solid #333; cursor: pointer;" onclick="openFullscreen(this)">
+            <source src="assets/Marbleland.m4v" type="video/mp4">
+        </video>
+        <div style="padding: 15px;">
+            <h3 style="margin: 0; font-family: sans-serif;">Marble Land</h3>
+            <p style="font-size: 0.9rem; color: #666;">Physics Simulation - Cycles</p>
+        </div>
+    </div>
+
+    <div class="card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <video autoplay loop muted playsinline 
+               style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 5px solid #333; cursor: pointer;" onclick="openFullscreen(this)">
+            <source src="assets/noodleshop.m4v" type="video/mp4">
+        </video>
+        <div style="padding: 15px;">
+            <h3 style="margin: 0; font-family: sans-serif;">Marble Land</h3>
+            <p style="font-size: 0.9rem; color: #666;">Physics Simulation - Cycles</p>
+        </div>
+    </div>
+
+    <div class="card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s;">
+        <img src="assets/waterscape.jpg" alt="Noodle Shop Render" 
+             style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 5px solid #333; cursor: pointer;" onclick="openFullscreen(this)">
+        <div style="padding: 15px;">
+            <h3 style="margin: 0; font-family: sans-serif;">Noodle Shop</h3>
+            <p style="font-size: 0.9rem; color: #666;">Blender 4.0 - Eevee Render</p>
+        </div>
+    </div>
+
+    <div class="card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <video autoplay loop muted playsinline 
+               style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 5px solid #333; cursor: pointer;" onclick="openFullscreen(this)">
+            <source src="assets/Flower.m4v" type="video/mp4">
+        </video>
+        <div style="padding: 15px;">
+            <h3 style="margin: 0; font-family: sans-serif;">Marble Land</h3>
+            <p style="font-size: 0.9rem; color: #666;">Physics Simulation - Cycles</p>
+        </div>
+    </div>
+    
+    <div class="card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s;">
+        <img src="assets/lego_flowers.png" alt="Noodle Shop Render" style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 5px solid #333; cursor: pointer;" onclick="openFullscreen(this)">
+        <div style="padding: 15px;">
+            <h3 style="margin: 0; font-family: sans-serif;">Noodle Shop</h3>
+            <p style="font-size: 0.9rem; color: #666;">Blender 4.0 - Eevee Render</p>
+        </div>
+    </div>
+
+    <div class="card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s;">
+        <img src="assets/darkwood.png" alt="Noodle Shop Render" 
+             style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 5px solid #333; cursor: pointer;" onclick="openFullscreen(this)">
+        <div style="padding: 15px;">
+            <h3 style="margin: 0; font-family: sans-serif;">Noodle Shop</h3>
+            <p style="font-size: 0.9rem; color: #666;">Blender 4.0 - Eevee Render</p>
+        </div>
+    </div>
+
+    <div class="card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s;">
+        <img src="assets/me_in_boat.png" alt="Noodle Shop Render" 
+             style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 5px solid #333; cursor: pointer;" onclick="openFullscreen(this)">
+        <div style="padding: 15px;">
+            <h3 style="margin: 0; font-family: sans-serif;">Noodle Shop</h3>
+            <p style="font-size: 0.9rem; color: #666;">Blender 4.0 - Eevee Render</p>
+        </div>
     </div>
 </div>
+<script>
+function openFullscreen(elem) {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+  
+  // For videos, make sure they play and show controls when in fullscreen
+  if (elem.tagName === 'VIDEO') {
+    elem.controls = true;
+    elem.play();
+  }
+}
+
+// Exit logic: Hide controls when exiting fullscreen
+document.addEventListener('fullscreenchange', (event) => {
+  if (!document.fullscreenElement) {
+    const videos = document.querySelectorAll('video');
+    videos.forEach(v => v.controls = false);
+  }
+});
+</script>

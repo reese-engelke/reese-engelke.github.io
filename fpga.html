@@ -3,125 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reese | Engineering & Personal Portfolio</title>
-    <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 1200px; margin: auto; padding: 20px; background: #f4f4f4; }
-        header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 40px; }
-        .project-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        video, img { width: 100%; border-radius: 5px; }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-        /* This targets any element (image or video) currently in fullscreen mode */
-        :fullscreen {
-            object-fit: contain !important;
-            background-color: black; /* Adds black bars to the sides of tall images */
-        }
-
-        /* Safari uses a different prefix, so we add this for compatibility */
-        :-webkit-full-screen {
-            object-fit: contain !important;
-            background-color: black;
-        }
-       pre {
-    background: #272822;
-    color: #f8f8f2;
-    padding: 15px;
-    border-radius: 5px;
-
-    max-height: 350px;        /* vertical limit */
-    overflow-y: auto;         /* vertical scrolling */
-    overflow-x: auto;         /* horizontal scrolling */
-
-    font-size: 0.85rem;
-
-    max-width: 100%;           /* don’t overflow container */
-    width: 100%;               /* fill its container */
-    box-sizing: border-box;
-}
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* two equal columns */
-    gap: 20px;
-}
-
-.grid > div:first-child {
-    max-width: 50vw;   /* restrict first column to half the viewport */
-}
-    </style>
+    <title>FPGA Projects | Reese Engelke</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-
-
-<nav style="background: #333; padding: 1rem; text-align: center;">
-    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Home</a>
-    <a href="fpga.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">FPGA Projects</a>
-    <a href="blender.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Blender Art</a>
+<body>
+<nav class="site-nav">
+    <a class="brand" href="index.html">Reese Engelke</a>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="fpga.html" aria-current="page">FPGA</a>
+        <a href="blender.html">Blender</a>
+    </div>
 </nav>
 
-<div class="project-card">
-    <h2>Project 01: AXI-Stream Convolution Core</h2>
-    <div class="grid">
-        <div>
-            <a href="https://github.com/reese-engelke/axis_convolution_core/tree/main">Repo</a>
-            <p>Built a custom Sobel Edge Detection kernel in <b>Verilog</b> for a Cyclone IV FPGA. Optimized for 60fps at 1080p.</p>
-            <pre><code>----------------------------------------------------------------------------------
--- Company: N/A
--- Engineer: Reese Engelke
--- 
--- Create Date: 02/08/2026 07:44:55 PM
--- Design Name: axi_convolution_core
--- Module Name: axi_convolution_core - Behavioral
--- Project Name: N/A
--- Target Devices: Any
--- Tool Versions: vivado 2025.1
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+<main class="wrap">
+    <header class="page-intro">
+        <h1>FPGA projects</h1>
+        <p>Streaming RTL for image and signal processing, packaged as reusable AXI-Stream IP.</p>
+    </header>
 
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-use IEEE.NUMERIC_STD.ALL;
-
-entity axi_convolution_core is
+    <article class="card">
+        <div class="card-body grid">
+            <div>
+                <div class="meta">
+                    <span class="tag">VHDL</span>
+                    <span class="tag">AXI-Stream</span>
+                    <span class="tag">Vivado 2025.1</span>
+                </div>
+                <h2>AXI-Stream Convolution Core</h2>
+                <p><a href="https://github.com/reese-engelke/axis_convolution_core/tree/main">github.com/reese-engelke/axis_convolution_core</a></p>
+                <p>A reusable convolution IP with a generic matrix size. The core first streams in the kernel coefficients, then the sample window, computes the element-wise products, accumulates them, and presents the result on the master AXI-Stream interface.</p>
+                <ul>
+                    <li>Slave stream: kernel, then sample window</li>
+                    <li>Master stream: 32-bit accumulated product</li>
+                    <li>Valid / ready / last handshaking on both sides</li>
+                </ul>
+            </div>
+            <div class="media">
+                <img src="assets/axi_convolution_core.jpg" alt="AXI convolution core IP block" onclick="openFullscreen(this)">
+                <img src="assets/conv_sim.png" alt="Convolution core simulation waveform" onclick="openFullscreen(this)">
+            </div>
+        </div>
+        <div class="card-body">
+            <h3>RTL</h3>
+            <pre><code>entity axi_convolution_core is
     generic (
         matrix_size : integer := 3
     );
-
-    Port ( 
-        --***************************
-        --Clocks and Resets
-        --***************************
+    Port (
         aclk : in STD_LOGIC;
-        aresetn : in STD_LOGIC;       
-        --***************************
-        --Slave AXI Stream Interface
-        --***************************
+        aresetn : in STD_LOGIC;
         s_axis_tdata : in STD_LOGIC_VECTOR(31 downto 0);
         s_axis_tvalid: in STD_LOGIC;
         s_axis_tready: out STD_LOGIC;
         s_axis_tlast: in STD_LOGIC;
-        --***************************
-        --Master AXI Stream Interface
-        --***************************
         m_axis_tdata : out STD_LOGIC_VECTOR(31 downto 0);
         m_axis_tvalid: out STD_LOGIC;
         m_axis_tready: in STD_LOGIC;
         m_axis_tlast : out STD_LOGIC
-           );
+    );
 end axi_convolution_core;
 
 architecture Behavioral of axi_convolution_core is
     type t_state is (ST_IDLE, ST_STATE1, ST_STATE2, ST_STATE3, ST_STATE4);
     signal st_state : t_state := ST_IDLE;
-
     type t_matrix_1 is array (0 to matrix_size-1, 0 to matrix_size-1) of integer range 0 to 255;
     signal q_kernel : t_matrix_1;
     signal q_sample : t_matrix_1;
@@ -129,8 +77,6 @@ architecture Behavioral of axi_convolution_core is
     signal q_product : t_matrix_2;
     signal q_shift_reg : integer;
 begin
-
-
 process(aclk, aresetn)
 variable v_acc : integer range 0 to 585225;
 begin
@@ -148,9 +94,12 @@ begin
             when ST_STATE1 =>
                 q_shift_reg <= q_shift_reg + 1;
                 if (q_shift_reg<(matrix_size**2)) then
-                    q_kernel((q_shift_reg / matrix_size), (q_shift_reg mod matrix_size)) <= to_integer(unsigned(s_axis_tdata(7 downto 0))); 
+                    q_kernel((q_shift_reg / matrix_size), (q_shift_reg mod matrix_size))
+                        <= to_integer(unsigned(s_axis_tdata(7 downto 0)));
                 else
-                    q_sample((q_shift_reg-(matrix_size**2))/matrix_size,(q_shift_reg-(matrix_size**2)) mod matrix_size) <= to_integer(unsigned(s_axis_tdata(7 downto 0))); 
+                    q_sample((q_shift_reg-(matrix_size**2))/matrix_size,
+                             (q_shift_reg-(matrix_size**2)) mod matrix_size)
+                        <= to_integer(unsigned(s_axis_tdata(7 downto 0)));
                 end if;
                 if (q_shift_reg=(((matrix_size**2)*2)-1) or s_axis_tlast = '1') then
                     st_state <= ST_STATE2;
@@ -164,25 +113,26 @@ begin
                         q_product(i,j) <= q_kernel(i,j) * q_sample(i,j);
                     end loop;
                 end loop;
-                    st_state <= ST_STATE3;
-                    q_shift_reg <= 0;
-                    v_acc := 0;
+                st_state <= ST_STATE3;
+                q_shift_reg <= 0;
+                v_acc := 0;
+
             when ST_STATE3 =>
-                  sum_gen_i : for i in 0 to matrix_size-1 loop
+                sum_gen_i : for i in 0 to matrix_size-1 loop
                    sum_loop_j : for j in 0 to matrix_size-1 loop
                         v_acc := v_acc + q_product(i,j);
                     end loop;
                 end loop;
                 st_state <= ST_STATE4;
-                
-            when ST_STATE4 => 
+
+            when ST_STATE4 =>
                 m_axis_tdata <= std_logic_vector(to_unsigned(v_acc,32));
                 m_axis_tvalid <= '1';
                 if (m_axis_tready = '1') then
                     m_axis_tlast <= '1';
                     st_state <= ST_IDLE;
-                end if; 
-                
+                end if;
+
             when others =>
                 m_axis_tvalid <= '0';
                 m_axis_tlast <= '0';
@@ -195,40 +145,15 @@ begin
                 end if;
         end case;
     end if;
-
 end process;
-
-end Behavioral;
-</code></pre>
+end Behavioral;</code></pre>
         </div>
-        <div>
-            <img src="assets/axi_convolution_core.jpg" alt="FPGA Board Setup"style="cursor: pointer;" onclick="openFullscreen(this)">
-            <img src="assets/conv_sim.png" alt="FPGA Board Setup" style="cursor: pointer;" onclick="openFullscreen(this)">
-        </div>
-    </div>
-</div>
-<script>
-function openFullscreen(elem) {
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) { /* Safari */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE11 */
-    elem.msRequestFullscreen();
-  }
-  
-  // For videos, make sure they play and show controls when in fullscreen
-  if (elem.tagName === 'VIDEO') {
-    elem.controls = true;
-    elem.play();
-  }
-}
+    </article>
+</main>
 
-// Exit logic: Hide controls when exiting fullscreen
-document.addEventListener('fullscreenchange', (event) => {
-  if (!document.fullscreenElement) {
-    const videos = document.querySelectorAll('video');
-    videos.forEach(v => v.controls = false);
-  }
-});
-</script>
+<footer class="site-footer">
+    <div class="wrap">© Reese Engelke</div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>

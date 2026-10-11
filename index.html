@@ -3,70 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reese | Engineering & Personal Portfolio</title>
-    <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 1200px; margin: auto; padding: 20px; background: #f4f4f4; }
-        header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 40px; }
-        .project-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        video, img { width: 100%; border-radius: 5px; }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-    </style>
+    <title>Reese Engelke | FPGA & 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<nav style="background: #333; padding: 1rem; text-align: center;">
-    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Home</a>
-    <a href="fpga.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">FPGA Projects</a>
-    <a href="blender.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Blender Art</a>
+<nav class="site-nav">
+    <a class="brand" href="index.html">Reese Engelke</a>
+    <div class="nav-links">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="fpga.html">FPGA</a>
+        <a href="blender.html">Blender</a>
+    </div>
 </nav>
 
-<header style="display: flex; align-items: center; gap: 20px; padding: 40px 20px;">
-    <img src="assets/me.jpg" alt="Reese Engelke" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #333;">
-    
-    <div>
-        <h1 style="margin: 0;">Reese Engelke</h1>
-        <p style="margin: 0; color: #666;">FPGA Engineer & 3D Designer</p>
-        <a href="https://github.com/reese-engelke">GitHub</a> | <a href="mailto:reese.engelke@gmail.com">Email</a>
-    </div>
-</header>
+<main class="wrap">
+    <header class="hero">
+        <img class="avatar" src="assets/me.jpg" alt="Reese Engelke">
+        <div>
+            <h1>Reese Engelke</h1>
+            <p class="lede">FPGA engineer and 3D artist. I design streaming hardware in VHDL and build cinematic scenes in Blender.</p>
+            <div class="contact">
+                <a class="chip" href="https://github.com/reese-engelke">GitHub</a>
+                <a class="chip" href="mailto:reese.engelke@gmail.com">Email</a>
+            </div>
+        </div>
+    </header>
 
-<div class="project-card">
-    <h2>Project 01: Image Processing Accelerator</h2>
-    <div class="grid">
-        <div>
-            <p>Built a custom Sobel Edge Detection kernel in <b>Verilog</b> for a Cyclone IV FPGA. Optimized for 60fps at 1080p.</p>
-            <pre><code>// Sample RTL snippet
-always @(posedge clk) begin
-    if (reset) 
-        pixel_out <= 8'h00;
-    else
-        pixel_out <= (gx + gy) >> 1;
-end</code></pre>
-        </div>
-        <div>
-            <img src="fpga_board_render.jpg" alt="FPGA Board Setup">
-        </div>
+    <div class="section-head">
+        <h2>Featured work</h2>
     </div>
-</div>
 
-<div class="project-card">
-    <h2>Project 02: Procedural Hard Surface Model</h2>
-    <div class="grid">
-        <div>
-            <video autoplay loop muted playsinline>
-                <source src="blender_render.mp4" type="video/mp4">
-            </video>
+    <article class="card">
+        <div class="card-body grid">
+            <div>
+                <div class="meta">
+                    <span class="tag">VHDL</span>
+                    <span class="tag">AXI-Stream</span>
+                    <span class="tag">Vivado 2025.1</span>
+                </div>
+                <h2>AXI-Stream Convolution Core</h2>
+                <p>A parameterized AXI-Stream IP that loads an N×N kernel, then a matching sample window, multiplies in place, and streams the accumulated result with valid/ready/last handshaking.</p>
+                <ul>
+                    <li>Generic kernel size (default 3×3)</li>
+                    <li>Separate slave and master AXI-Stream ports</li>
+                    <li>Simulated in Vivado against a streaming testbench</li>
+                </ul>
+                <p><a href="fpga.html">View write-up</a> · <a href="https://github.com/reese-engelke/axis_convolution_core/tree/main">Repo</a></p>
+                <pre><code>when ST_STATE2 =>
+    s_axis_tready <= '0';
+    for i in 0 to matrix_size-1 loop
+        for j in 0 to matrix_size-1 loop
+            q_product(i,j) <= q_kernel(i,j) * q_sample(i,j);
+        end loop;
+    end loop;
+    st_state <= ST_STATE3;</code></pre>
+            </div>
+            <div class="media">
+                <img src="assets/axi_convolution_core.jpg" alt="AXI convolution core IP block with stream ports" onclick="openFullscreen(this)">
+                <img src="assets/conv_sim.png" alt="Vivado simulation of AXI-Stream convolution handshaking" onclick="openFullscreen(this)">
+            </div>
         </div>
-        <div>
-            <p>Designed in <b>Blender 4.0</b> using Geometry Nodes. The goal was to create a modular sci-fi corridor that reacts to a light source path.</p>
-            <ul>
-                <li>Cycles Render: 1000 samples</li>
-                <li>Post-processing: OptiX Denoiser</li>
-            </ul>
-        </div>
-    </div>
-</div>
+    </article>
 
+    <article class="card">
+        <div class="card-body grid">
+            <div class="media">
+                <video autoplay loop muted playsinline onclick="openFullscreen(this)">
+                    <source src="assets/noodleshop.m4v" type="video/mp4">
+                </video>
+            </div>
+            <div>
+                <div class="meta">
+                    <span class="tag">Blender</span>
+                    <span class="tag">Cycles</span>
+                </div>
+                <h2>Noodle Shop</h2>
+                <p>A night street stall with neon signage, wet pavement, and a still figure in the doorway. Modeled and lit in Blender, rendered in Cycles.</p>
+                <p><a href="blender.html">See the full gallery</a></p>
+            </div>
+        </div>
+    </article>
+</main>
+
+<footer class="site-footer">
+    <div class="wrap">© Reese Engelke</div>
+</footer>
+<script src="script.js"></script>
 </body>
 </html>
